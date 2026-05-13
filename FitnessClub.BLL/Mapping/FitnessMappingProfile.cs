@@ -11,7 +11,8 @@ namespace FitnessClub.BLL.Mapping
             CreateMap<Club, ClubDto>().ReverseMap();
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<SubscriptionType, SubscriptionTypeDto>().ReverseMap();
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Training, TrainingDto>().ReverseMap();
         }
     }
 }

@@ -25,15 +25,15 @@ namespace FitnessClub.BLL.Services
             _uow.Save();
         }
 
-        public void CreateSubscriptionType(string name, decimal price, bool isNetwork)
+        public void CreateSubscriptionType(string name, decimal price, bool isNetwork, TimeSpan startTime, TimeSpan endTime)
         {
-            _uow.SubscriptionTypes.Create(new SubscriptionType { Name = name, Price = price, IsNetworkAccess = isNetwork });
+            _uow.SubscriptionTypes.Create(new SubscriptionType { Name = name, Price = price, IsNetworkAccess = isNetwork, StartTime = startTime, EndTime = endTime });
             _uow.Save();
         }
 
-        public void CreateTraining(string name, int clubId, DateTime time)
+        public void CreateTraining(string name, int clubId, DateTime time, decimal price)
         {
-            _uow.Trainings.Create(new Training { Name = name, ClubId = clubId, ScheduleTime = time });
+            _uow.Trainings.Create(new Training { Name = name, ClubId = clubId, ScheduleTime = time, Price=price });
             _uow.Save();
         }
 

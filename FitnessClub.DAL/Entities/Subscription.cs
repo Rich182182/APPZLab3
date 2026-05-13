@@ -14,5 +14,6 @@ namespace FitnessClub.DAL.Entities
 
         public int? ClubId { get; set; }
         public Club Club { get; set; }
+
     }
 }

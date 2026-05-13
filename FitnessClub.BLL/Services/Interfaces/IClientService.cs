@@ -1,4 +1,6 @@
 ﻿using FitnessClub.BLL.DTOs;
+using FitnessClub.DAL.Entities;
+using System.Collections.Generic;
 
 namespace FitnessClub.BLL.Services.Interfaces
 {
@@ -6,8 +8,12 @@ namespace FitnessClub.BLL.Services.Interfaces
     {
         IEnumerable<ClubDto> GetClubs();
         IEnumerable<SubscriptionTypeDto> GetSubscriptionTypes();
+        IEnumerable<TrainingDto> GetTrainings();
+        IEnumerable<ClientSubscriptionDto> GetClientSubscriptions(int userId);
         bool BuySubscription(int userId, int typeId, int? clubId);
         bool BookTraining(int userId, int trainingId);
-        string TryVisitClub(int userId, int clubId);
+        string AttendTraining(int userId, int trainingId);
+        bool TopUpBalance(int userId, decimal amount);
+        decimal GetBalance(int userId);
     }
 }
