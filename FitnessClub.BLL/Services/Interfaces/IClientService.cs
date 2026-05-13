@@ -6,9 +6,6 @@ namespace FitnessClub.BLL.Services.Interfaces
 {
     public interface IClientService
     {
-        IEnumerable<ClubDto> GetClubs();
-        IEnumerable<SubscriptionTypeDto> GetSubscriptionTypes();
-        IEnumerable<TrainingDto> GetTrainings();
         IEnumerable<ClientSubscriptionDto> GetClientSubscriptions(int userId);
         bool BuySubscription(int userId, int typeId, int? clubId);
         bool BookTraining(int userId, int trainingId);

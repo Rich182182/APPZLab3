@@ -20,9 +20,6 @@ namespace FitnessClub.BLL.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<ClubDto> GetClubs() => _mapper.Map<IEnumerable<ClubDto>>(_uow.Clubs.GetAll());
-
-        public IEnumerable<SubscriptionTypeDto> GetSubscriptionTypes() => _mapper.Map<IEnumerable<SubscriptionTypeDto>>(_uow.SubscriptionTypes.GetAll());
         public IEnumerable<ClientSubscriptionDto> GetClientSubscriptions(int userId)
         {
             var user = _uow.Users.Get(userId);
@@ -51,7 +48,6 @@ namespace FitnessClub.BLL.Services
             return result;
         }
 
-        public IEnumerable<TrainingDto> GetTrainings() => _mapper.Map<IEnumerable<TrainingDto>>(_uow.Trainings.GetAll());
 
         public bool BuySubscription(int userId, int typeId, int? clubId)
         {
