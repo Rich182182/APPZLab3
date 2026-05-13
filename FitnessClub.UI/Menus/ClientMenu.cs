@@ -135,7 +135,6 @@ namespace FitnessClub.UI.Menus
             if (!int.TryParse(Console.ReadLine(), out int bookTrainingId)) return;
 
             bool successBook = _client.BookTraining(_currentUser.Id, bookTrainingId);
-            Console.WriteLine(successBook ? "Успішно записано." : "Помилка запису (можливо ви вже записані).");
         }
 
         private void AttendTraining()

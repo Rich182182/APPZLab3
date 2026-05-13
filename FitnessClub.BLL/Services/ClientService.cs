@@ -12,12 +12,10 @@ namespace FitnessClub.BLL.Services
     public class ClientService : IClientService
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
 
-        public ClientService(IUnitOfWork uow, IMapper mapper)
+        public ClientService(IUnitOfWork uow)
         {
             _uow = uow;
-            _mapper = mapper;
         }
 
         public IEnumerable<ClientSubscriptionDto> GetClientSubscriptions(int userId)

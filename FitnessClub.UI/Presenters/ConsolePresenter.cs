@@ -39,7 +39,7 @@ namespace FitnessClub.UI.Presenters
             Console.WriteLine("\n--- ВАШІ АБОНЕМЕНТИ ---");
             foreach (var sub in subscriptions)
             {
-                string status = sub.IsActive ? "✓ Активна" : "✗ Закінчена";
+                string status = sub.IsActive ? "Активна" : "Закінчена";
                 string network = sub.IsNetworkAccess ? "Мережевий" : $"Локальний ({sub.ClubName})";
                 string time = sub.StartTime.HasValue && sub.EndTime.HasValue
                     ? $" ({sub.StartTime:hh\\:mm} - {sub.EndTime:hh\\:mm})"

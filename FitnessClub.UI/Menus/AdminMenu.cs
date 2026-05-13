@@ -60,6 +60,7 @@ namespace FitnessClub.UI.Menus
         private void AddClub()
         {
             _presenter.ShowClubs(_display.GetClubs());
+            Console.WriteLine("Додайте новий клуб:");
             Console.Write("Назва клубу: ");
             string name = Console.ReadLine();
             Console.Write("Адреса: ");
@@ -71,6 +72,7 @@ namespace FitnessClub.UI.Menus
         private void AddSubscriptionType()
         {
             _presenter.ShowSubscriptionTypes(_display.GetSubscriptionTypes());
+            Console.WriteLine("Додайте новий тип абонемента:");
             Console.Write("Назва абонемента: ");
             string subName = Console.ReadLine();
 
@@ -106,9 +108,11 @@ namespace FitnessClub.UI.Menus
 
         private void AddTraining()
         {
-            
+            _presenter.ShowTrainings(_display.GetTrainings());
+            Console.WriteLine("Додайте нове тренування:");
             Console.Write("Назва тренування: ");
             string trainingName = Console.ReadLine();
+
 
             if (string.IsNullOrWhiteSpace(trainingName))
             {
