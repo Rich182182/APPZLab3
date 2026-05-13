@@ -142,6 +142,12 @@ namespace FitnessClub.UI.Menus
                 return;
             }
 
+            if (scheduleTime <= DateTime.Now)
+            {
+                Console.WriteLine("Час проведення повинен бути пізніше за поточний час.");
+                return;
+            }
+
             Console.Write("Ціна: ");
             if (!decimal.TryParse(Console.ReadLine(), out decimal trainPrice))
             {

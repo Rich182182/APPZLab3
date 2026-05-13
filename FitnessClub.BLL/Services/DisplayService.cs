@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using FitnessClub.BLL.DTOs;
 using FitnessClub.BLL.Services.Interfaces;
@@ -21,7 +22,11 @@ namespace FitnessClub.BLL.Services
             _mapper.Map<IEnumerable<ClubDto>>(_uow.Clubs.GetAll());
 
         public IEnumerable<TrainingDto> GetTrainings() => 
-            _mapper.Map<IEnumerable<TrainingDto>>(_uow.Trainings.GetAll());
+            _mapper.Map<IEnumerable<TrainingDto>>(
+                _uow.Trainings
+                    .GetWithIncludes(t => t.Club)
+                    .ToList()
+            );
 
         public IEnumerable<SubscriptionTypeDto> GetSubscriptionTypes() => 
             _mapper.Map<IEnumerable<SubscriptionTypeDto>>(_uow.SubscriptionTypes.GetAll());

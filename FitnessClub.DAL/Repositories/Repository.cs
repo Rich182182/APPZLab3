@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using FitnessClub.DAL.Context;
 using FitnessClub.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,26 @@ namespace FitnessClub.DAL.Repositories
         public IEnumerable<T> Find(Func<T, bool> predicate)
         {
             return _dbSet.Where(predicate).ToList();
+        }
+
+        public IQueryable<T> GetWithIncludes(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
+        }
+
+        public IQueryable<T> FindWithIncludes(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.Where(predicate);
         }
 
         public void Create(T item)

@@ -23,23 +23,26 @@ namespace FitnessClub.BLL.Services
             var user = _uow.Users.Get(userId);
             if (user?.ClientId == null) return Enumerable.Empty<ClientSubscriptionDto>();
 
-            var subscriptions = _uow.Subscriptions.Find(s => s.ClientId == user.ClientId.Value).ToList();
+            var subscriptions = _uow.Subscriptions
+                .FindWithIncludes(
+                    s => s.ClientId == user.ClientId.Value,
+                    s => s.SubscriptionType,
+                    s => s.Club
+                )
+                .ToList();
 
             var result = subscriptions.Select(sub =>
             {
-                var subType = _uow.SubscriptionTypes.Get(sub.SubscriptionTypeId);
-                var club = sub.ClubId.HasValue ? _uow.Clubs.Get(sub.ClubId.Value) : null;
-
                 return new ClientSubscriptionDto
                 {
                     Id = sub.Id,
-                    SubscriptionTypeName = subType.Name,
-                    Price = subType.Price,
-                    IsNetworkAccess = subType.IsNetworkAccess,
+                    SubscriptionTypeName = sub.SubscriptionType.Name,
+                    Price = sub.SubscriptionType.Price,
+                    IsNetworkAccess = sub.SubscriptionType.IsNetworkAccess,
                     EndDate = sub.EndDate,
-                    StartTime = subType.StartTime,
-                    EndTime = subType.EndTime,
-                    ClubName = club?.Name ?? "Мережевий доступ"
+                    StartTime = sub.SubscriptionType.StartTime,
+                    EndTime = sub.SubscriptionType.EndTime,
+                    ClubName = sub.Club?.Name ?? "Мережевий доступ"
                 };
             }).ToList();
 
@@ -81,7 +84,13 @@ namespace FitnessClub.BLL.Services
             var training = _uow.Trainings.Get(trainingId);
             if (training == null) return false;
 
-            var subscriptions = _uow.Subscriptions.Find(s => s.ClientId == user.ClientId.Value).ToList();
+            var subscriptions = _uow.Subscriptions
+                .FindWithIncludes(
+                    s => s.ClientId == user.ClientId.Value,
+                    s => s.SubscriptionType
+                )
+                .ToList();
+
             var validSubscriptions = subscriptions.Where(s => IsSubscriptionValidForTraining(s, training)).ToList();
             if (validSubscriptions?.Any() == true)
             {
@@ -136,11 +145,18 @@ namespace FitnessClub.BLL.Services
             bool hasBooking = _uow.Bookings.Find(b => b.ClientId == user.ClientId && b.TrainingId == trainingId).Any();
             if (hasBooking) return "Успішно: Ваш попередній запис підтверджено.";
 
-            var subscriptions = _uow.Subscriptions.Find(s => s.ClientId == user.ClientId.Value).ToList();
+            var subscriptions = _uow.Subscriptions
+                .FindWithIncludes(
+                    s => s.ClientId == user.ClientId.Value,
+                    s => s.SubscriptionType
+                )
+                .ToList();
+
             var validSubscriptions = subscriptions.Where(s => IsSubscriptionValidForTraining(s, training)).ToList();
             if (validSubscriptions?.Any() == true) return "Успішно: Прохід за абонементом клубу.";
             return "Відмовлено: На це заняття потрібен попередній запис.";
         }
+
         public bool TopUpBalance(int userId, decimal amount)
         {
             var user = _uow.Users.Get(userId);
@@ -158,15 +174,13 @@ namespace FitnessClub.BLL.Services
             var client = _uow.Clients.Get(user.ClientId.Value);
             return client.Balance;
         }
+
         private bool IsSubscriptionValidForTraining(Subscription subscription, Training training)
         {
-            
-
-            var subType = _uow.SubscriptionTypes.Get(subscription.SubscriptionTypeId);
+            var subType = subscription.SubscriptionType;
 
             if (subType == null)
                 return false;
-
 
             if (!subType.IsNetworkAccess && subscription.ClubId != training.ClubId)
                 return false;

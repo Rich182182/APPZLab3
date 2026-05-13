@@ -15,16 +15,54 @@ namespace FitnessClub.DAL.Context
 
         public FitnessContext(DbContextOptions<FitnessContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            Database.EnsureCreated();   
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.Client)
+                .WithMany(c => c.Subscriptions)
+                .HasForeignKey(s => s.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.SubscriptionType)
+                .WithMany(st => st.Subscriptions)
+                .HasForeignKey(s => s.SubscriptionTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Subscription>()
                 .HasOne(s => s.Club)
                 .WithMany(c => c.Subscriptions)
                 .HasForeignKey(s => s.ClubId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Training>()
+                .HasOne(t => t.Club)
+                .WithMany(c => c.Trainings)
+                .HasForeignKey(t => t.ClubId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Client)
+                .WithMany(c => c.Bookings)
+                .HasForeignKey(b => b.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Training)
+                .WithMany(t => t.Bookings)
+                .HasForeignKey(b => b.TrainingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Client)
+                .WithMany()
+                .HasForeignKey(u => u.ClientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>().HasData(new User
             {
